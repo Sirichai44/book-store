@@ -1,4 +1,5 @@
 import { getEnv } from "./config/config.ts"
+import logger from "./config/logger.ts"
 import mongoConn from "./drivers/mongo_conn.ts"
 import app from "./server.ts"
 import dotenv from "dotenv"
@@ -7,6 +8,7 @@ dotenv.config({ path: "../.env" })
 const { PORT, ...mongoConfig } = getEnv()
 
 const main = async () => {
+  logger.info("Initializing server...")
   try {
     await mongoConn(mongoConfig)
     if (!PORT) {
@@ -14,13 +16,13 @@ const main = async () => {
     }
 
     const server = app.listen(PORT, () => {
-      console.log("Server running on port %d", PORT)
+      logger.info("Server running on port " + PORT)
     })
 
     const gracefulShutdown = () => {
-      console.log("Received kill signal, shutting down...")
+      logger.info("Received kill signal, shutting down...")
       server.close(() => {
-        console.log("Server is closed")
+        logger.info("Server closed")
         process.exit(0)
       })
     }
@@ -28,7 +30,7 @@ const main = async () => {
     process.on("SIGINT", gracefulShutdown)
     process.on("SIGTERM", gracefulShutdown)
   } catch (error) {
-    console.error("Error starting server: %s", error)
+    logger.error("Starting server: " + error)
     process.exit(1)
   }
 }
