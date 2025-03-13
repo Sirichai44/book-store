@@ -1,3 +1,4 @@
+export const DB_NAME_BOOKS = "books"
 export interface Env {
   PORT: Number
   MONGODB_URI: string

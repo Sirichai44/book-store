@@ -9,7 +9,7 @@
   },
   "nodemonConfig": {
     "watch": [
-      "index.ts"
+      "../server"
     ],
     "ext": "ts",
     "exec": "ts-node -r dotenv/config index.ts"
@@ -17,12 +17,14 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/morgan": "^1.9.9"
+    "@types/morgan": "^1.9.9",
+    "bun-types": "^1.2.5"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "bun": "^1.2.5",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
