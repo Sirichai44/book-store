@@ -1,0 +1,19 @@
+services:
+  mongo_db:
+    image: mongo
+    container_name: mongo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_db_data:/data/db
+      - ./db/books.json:/docker-entrypoint-initdb.d/books.json
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-P@ssw0rd}
+      MONGO_INITDB_DATABASE: ${MONGODB_DATABASE:-bookstore}
+    restart: always
+    env_file:
+      - ../.env
+
+volumes:
+  mongo_db_data:
