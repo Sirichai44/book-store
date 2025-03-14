@@ -12,3 +12,8 @@ export interface Book {
   format: string
   image: string
 }
+
+export interface DtoBooks {
+  data: Book[]
+  total: number
+}

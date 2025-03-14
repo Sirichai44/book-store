@@ -1,8 +1,20 @@
+<div class="flex justify-end h-[60px] items-center">
+  <mat-paginator
+    class="bg-transparent"
+    [length]="data.total"
+    [pageSize]="limit"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+    (page)="onChangePage($event)"
+  >
+  </mat-paginator>
+</div>
+
 <div
-  class="max-h-[calc(100%-100px)] grid xl:grid-cols-6 gap-4 p-4 overflow-y-scroll md:grid-cols-3 lg:grid-cols-4"
+  class="max-h-[calc(100%-160px)] grid xl:grid-cols-6 gap-4 p-4 overflow-y-scroll md:grid-cols-3 lg:grid-cols-4"
 >
   <div
-    *ngFor="let book of books"
+    *ngFor="let book of data.data"
     class="flex h-[194px] items-center justify-center"
   >
     <div class="flex h-full w-full border border-gray-200 rounded-lg gap-4">
@@ -60,11 +72,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="flex justify-end h-10 items-center">
-  <button (click)="onChangePage('prev')" [disabled]="page <= 1">
-    Previous
-  </button>
-  <button (click)="onChangePage('next')">Next</button>
 </div>

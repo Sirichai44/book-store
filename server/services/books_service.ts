@@ -38,8 +38,15 @@ export const getBooks = async (page: number, limit: number, search: string) => {
   )
 
   const books = await BooksSchema.aggregate(pipeline)
+  const total = await BooksSchema.countDocuments(
+    search ? { $text: { $search: search } } : {},
+  )
+  const obj = {
+    data: books,
+    total,
+  }
 
-  return books
+  return obj
 }
 
 export const getBookById = async (id: string) => {

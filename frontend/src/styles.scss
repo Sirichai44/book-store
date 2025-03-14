@@ -1,0 +1,29 @@
+@use "@angular/material" as mat;
+@use "tailwindcss";
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --grey-200: ;
+
+  @include mat.paginator-overrides(
+    (
+      container-background-color: transparent,
+      enabled-icon-color: orange,
+    )
+  );
+}
+
+.mdc-notched-outline__trailing,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__leading {
+  @apply border-gray-200;
+  border-color: theme("colors.gray.200") !important;
+}

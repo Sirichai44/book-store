@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { BASE_URL } from "./apis"
-import { Book } from "../types/books"
+import { DtoBooks } from "../types/books"
 
 @Injectable({
   providedIn: "root",
@@ -13,6 +13,6 @@ export class BooksService {
 
   getBooks(page: number, limit: number, search: string) {
     const query = { page: page, limit: limit, search: search }
-    return this.http.get<Book[]>(this.booksUrl, { params: query })
+    return this.http.get<DtoBooks>(this.booksUrl, { params: query })
   }
 }
