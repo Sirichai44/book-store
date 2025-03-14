@@ -1,4 +1,5 @@
 export interface BooksListRequestBody {
-  page: number
-  limit: number
+  search: string
+  page: string
+  limit: string
 }

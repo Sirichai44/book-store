@@ -1,9 +1,10 @@
-import { Router } from "express"
+import { Router, type Request } from "express"
 import * as bookHandler from "../handlers/book_handler.ts"
+import type { BooksListRequestBody } from "../types/book.ts"
 
 const booksRouter = Router()
 
-booksRouter.post("/", (req, res) => {
+booksRouter.get("/", (req: Request<{}, {}, {}, BooksListRequestBody>, res) => {
   bookHandler.booksList(req, res)
 })
 

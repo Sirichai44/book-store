@@ -5,17 +5,20 @@ import type { BooksListRequestBody } from "../types/book.ts"
 import { validObjectID } from "../config/config.ts"
 
 export const booksList = async (
-  req: Request<{}, {}, BooksListRequestBody>,
+  req: Request<{}, {}, {}, BooksListRequestBody>,
   res: Response,
 ) => {
-  const { page, limit } = req.body
+  const { page, limit, search } = req.query
+  const p = parseInt(page)
+  const l = parseInt(limit)
+  const searchStr = search ? search.toString() : ""
 
-  if (!page || !limit) {
+  if (!p || !l) {
     return res.status(400).json({ message: "Page and limit are required" })
   }
 
   try {
-    const books = await bookService.getBooks(page, limit)
+    const books = await bookService.getBooks(p, l, searchStr)
     logger.info(
       `Books handler: ${req.headers.host} Get all books successful with ${books.length} books`,
     )

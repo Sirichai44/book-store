@@ -6,10 +6,6 @@ const mongoConn = async (config: MongoEnv) => {
   logger.info("Connecting to MongoDB...")
   try {
     await mongoose.connect(config.MONGODB_URI, {
-      auth: {
-        username: config.MONGODB_USER,
-        password: config.MONGODB_PASSWORD,
-      },
       dbName: config.MONGODB_DATABASE,
       serverSelectionTimeoutMS: 10000,
     })

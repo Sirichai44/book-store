@@ -4,12 +4,7 @@ import BooksSchema from "../models/books.ts"
 import type { BooksListRequestBody } from "../types/book.ts"
 import type { Request, Response } from "express"
 
-const mockSkip = jest.fn().mockReturnThis()
-const mockLimit = jest.fn().mockResolvedValue([])
-BooksSchema.find = jest.fn().mockReturnValue({
-  skip: mockSkip,
-  limit: mockLimit,
-})
+const mockAggregate = (BooksSchema.aggregate = jest.fn())
 
 const mockFindByID = (BooksSchema.findById = jest.fn())
 
@@ -34,33 +29,34 @@ describe("Book Handler", () => {
       })
 
       const mockReq = {
-        body: {
-          page: 1,
-          limit: 10,
+        query: {
+          page: "1",
+          limit: "10",
+          search: "",
         },
         headers: {
           host: "localhost",
         },
-      } as Request<{}, {}, BooksListRequestBody>
+      } as Request<{}, {}, {}, BooksListRequestBody>
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
       } as unknown as Response
 
-      mockLimit.mockResolvedValue(mockBooks)
+      mockAggregate.mockResolvedValue(mockBooks)
 
       await booksHandler.booksList(mockReq, mockResponse)
 
-      expect(BooksSchema.find).toHaveBeenCalledTimes(1)
+      expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
       expect(mockResponse.status).toHaveBeenCalledWith(200)
       expect(mockResponse.json).toHaveBeenCalledWith(mockBooks)
     })
 
     it("should return 400 if page or limit is missing", async () => {
       const mockReq = {
-        body: {},
-      } as Request<{}, {}, BooksListRequestBody>
+        query: {},
+      } as Request<{}, {}, {}, BooksListRequestBody>
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
@@ -77,18 +73,19 @@ describe("Book Handler", () => {
 
     it("should return 500 if an error occurs", async () => {
       const mockReq = {
-        body: {
-          page: 1,
-          limit: 10,
+        query: {
+          page: "1",
+          limit: "10",
+          search: "",
         },
-      } as Request<{}, {}, BooksListRequestBody>
+      } as Request<{}, {}, {}, BooksListRequestBody>
 
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn().mockReturnThis(),
       } as unknown as Response
 
-      mockLimit.mockRejectedValue(new Error("An error occurred"))
+      mockAggregate.mockRejectedValue(new Error("An error occurred"))
 
       await booksHandler.booksList(mockReq, mockResponse)
 

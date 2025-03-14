@@ -1,19 +1,18 @@
-import { describe, expect, it, jest } from "bun:test"
+import { beforeEach, describe, expect, it, jest } from "bun:test"
 import * as booksService from "../services/books_service.ts"
 import BooksSchema from "../models/books.ts"
 
-const mockSkip = jest.fn().mockReturnThis()
-const mockLimit = jest.fn().mockResolvedValue([])
-BooksSchema.find = jest.fn().mockReturnValue({
-  skip: mockSkip,
-  limit: mockLimit,
-})
+const mockAggregate = (BooksSchema.aggregate = jest.fn())
 
 const mockFindByID = (BooksSchema.findById = jest.fn())
 
 describe("Book Service", () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe("getBooks", () => {
-    it("should return books", async () => {
+    it("should return books without search", async () => {
       const mockBooks = Array.from({ length: 10 }, (_, i) => {
         return new BooksSchema({
           title: `Book ${i + 1}`,
@@ -31,14 +30,38 @@ describe("Book Service", () => {
         })
       })
 
-      mockLimit.mockResolvedValue(mockBooks)
+      mockAggregate.mockResolvedValue(mockBooks)
 
-      const result = await booksService.getBooks(1, 10)
+      const result = await booksService.getBooks(1, 10, "")
 
       expect(result).toEqual(mockBooks)
-      expect(BooksSchema.find).toHaveBeenCalledTimes(1)
-      expect(mockSkip).toHaveBeenCalledWith(0)
-      expect(mockLimit).toHaveBeenCalledWith(10)
+      expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
+    })
+
+    it("should return books with search", async () => {
+      const mockBooks = Array.from({ length: 10 }, (_, i) => {
+        return new BooksSchema({
+          title: `Book ${i + 1}`,
+          author: `Author ${i + 1}`,
+          pageCount: 300 + i,
+          description: `Description ${i + 1}`,
+          publishDate: new Date(`2025-03-15T00:00:00Z`),
+          genres: [`Genre ${i + 1}`, `Genre ${i + 2}`],
+          format: "Hardcover",
+          isbn: `978-1-234567-89-${i}`,
+          language: "English",
+          price: 29.99,
+          publisher: "Future Press",
+          rating: 4.8,
+        })
+      })
+
+      mockAggregate.mockResolvedValue(mockBooks)
+
+      const result = await booksService.getBooks(1, 10, "Test")
+
+      expect(result).toEqual(mockBooks)
+      expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
     })
   })
 
