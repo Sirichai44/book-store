@@ -2,10 +2,50 @@
   <div class="flex items-center justify-center gap-4">
     <app-search></app-search>
 
-    <a [routerLink]="['checkout']">
-      <img src="assets/cart.png" alt="cart" class="w-10 h-10" />
+    <a
+      [routerLink]="['checkout']"
+      class="relative"
+      (mouseenter)="showDetailCart = true"
+      (mouseleave)="showDetailCart = false"
+    >
+      <lucide-icon
+        [name]="ShoppingCartIcon"
+        size="30"
+        class="text-orange-500 cursor-pointer hover:text-orange-600"
+      ></lucide-icon>
+
+      <span
+        *ngIf="carts.length"
+        class="absolute -top-2 -right-4 bg-orange-500 text-white rounded-full py-1 px-2 text-xs"
+        >{{ carts.length }}</span
+      >
+
+      <div
+        *ngIf="showDetailCart && carts.length > 0"
+        class="absolute top-10 right-0 bg-white border border-gray-300 shadow-lg p-4 w-80 rounded-lg"
+      >
+        <h3 class="text-lg font-semibold mb-2">Cart Items</h3>
+        <ul>
+          <li
+            *ngFor="let cartItem of carts"
+            class="mb-2 flex items-center gap-2"
+          >
+            <img
+              src="{{ cartItem.image }}"
+              alt="{{ cartItem.title }}"
+              class="w-12 h-12 rounded-md object-cover"
+            />
+
+            <div class="flex justify-between w-full">
+              <div>{{ cartItem.title }} ({{ cartItem.quantity }})</div>
+              <div class="text-orange-500">
+                {{ cartItem.price * cartItem.quantity }} $
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </a>
   </div>
-
   <app-books-list></app-books-list>
 </div>

@@ -1,1 +1,72 @@
-<p>checkout works!</p>
+<div class="flex flex-col items-center bg-gray-100">
+  <div
+    class="p-3 flex justify-center max-h-[calc(100vh-260px)] h-[calc(100vh-260px)] overflow-y-auto w-6/12"
+  >
+    <div class="w-full">
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2">Cart Items</h3>
+
+        <div class="grid grid-cols-12 gap-4 my-6 bg-white p-3 text-slate-400">
+          <div class="col-span-4">Product</div>
+          <div class="col-span-2 text-center">Price per Item</div>
+          <div class="col-span-2 text-center">Quantity</div>
+          <div class="col-span-2 text-center">Total Price</div>
+          <div class="col-span-2 text-center">Action</div>
+        </div>
+
+        <div
+          *ngFor="let cartItem of carts"
+          class="grid grid-cols-12 gap-4 bg-white mb-6"
+        >
+          <div class="col-span-4 flex items-center gap-4 p-3">
+            <img
+              src="{{ cartItem.image }}"
+              alt="{{ cartItem.title }}"
+              class="w-18 h-24 rounded-md object-cover"
+            />
+            <div>{{ cartItem.title }}</div>
+          </div>
+          <div
+            class="col-span-2 text-center p-3 flex items-center justify-center"
+          >
+            {{ cartItem.price }} $
+          </div>
+          <div
+            class="col-span-2 text-center p-3 flex items-center justify-center"
+          >
+            {{ cartItem.quantity }}
+          </div>
+          <div
+            class="col-span-2 text-center p-3 text-orange-500 flex items-center justify-center"
+          >
+            {{ cartItem.price * cartItem.quantity }} $
+          </div>
+          <div
+            class="col-span-2 text-center p-3 flex items-center justify-center"
+          >
+            Remove
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="border border-red-600 h-[200px] p-3 flex flex-col justify-end items-end w-6/12"
+  >
+    <div class="gap-4 flex items-center">
+      <div>
+        Total Price:
+        <span class="text-orange-500 text-2xl font-bold"
+          >{{ getTotalPrice() }} $</span
+        >
+      </div>
+
+      <button
+        class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 cursor-pointer"
+      >
+        Checkout
+      </button>
+    </div>
+  </div>
+</div>

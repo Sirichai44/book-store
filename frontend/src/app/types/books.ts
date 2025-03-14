@@ -17,3 +17,7 @@ export interface DtoBooks {
   data: Book[]
   total: number
 }
+
+export interface CartBooks extends Book {
+  quantity: number
+}

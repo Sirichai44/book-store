@@ -20,7 +20,7 @@ export const booksList = async (
   try {
     const books = await bookService.getBooks(p, l, searchStr)
     logger.info(
-      `Books handler: ${req.headers.host} Get all books successful with ${books.length} books`,
+      `Books handler: ${req.headers.host} Get all books successful with ${books.total} books`,
     )
     return res.status(200).json(books)
   } catch (error) {

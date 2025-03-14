@@ -10,6 +10,7 @@ import {
   StarHalf,
   ShoppingBasket,
 } from "lucide-angular"
+import { Subscription } from "rxjs"
 
 @Component({
   selector: "app-books-list",
@@ -28,6 +29,7 @@ export class BooksListComponent {
   search = ""
   page = 1
   limit = 20
+  private queryParamsSubscription: Subscription = new Subscription()
 
   constructor(
     private booksService: BooksService,
@@ -36,13 +38,19 @@ export class BooksListComponent {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.search = params["search"] || ""
-      this.page = params["page"] || 1
-      this.limit = params["limit"] || 10
-      this.getBooks(this.page, this.limit, this.search)
-      this.updateQueryParams()
-    })
+    this.queryParamsSubscription = this.route.queryParams.subscribe(
+      (params) => {
+        this.search = params["search"] || ""
+        this.page = params["page"] || 1
+        this.limit = params["limit"] || 10
+        this.getBooks(this.page, this.limit, this.search)
+        this.updateQueryParams()
+      },
+    )
+  }
+
+  ngOnDestroy() {
+    this.queryParamsSubscription.unsubscribe()
   }
 
   getBooks(page: number, limit: number, search: string) {
@@ -67,5 +75,9 @@ export class BooksListComponent {
     this.page = event.pageIndex + 1
     this.limit = event.pageSize
     this.updateQueryParams()
+  }
+
+  onAddToCart(book: Book) {
+    this.booksService.addBook(book)
   }
 }

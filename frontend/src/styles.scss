@@ -11,8 +11,6 @@ body {
 }
 
 :root {
-  --grey-200: ;
-
   @include mat.paginator-overrides(
     (
       container-background-color: transparent,

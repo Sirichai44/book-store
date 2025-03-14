@@ -11,7 +11,7 @@
 </div>
 
 <div
-  class="max-h-[calc(100%-160px)] grid xl:grid-cols-6 gap-4 p-4 overflow-y-scroll md:grid-cols-3 lg:grid-cols-4"
+  class="max-h-[calc(100%-160px)] grid xl:grid-cols-5 gap-4 p-4 overflow-y-scroll md:grid-cols-3 lg:grid-cols-4"
 >
   <div
     *ngFor="let book of data.data"
@@ -64,7 +64,8 @@
         </div>
 
         <div
-          class="flex gap-2 items-center text-orange-500 border border-orange-500 justify-center bg-orange-50 rounded-lg w-[130px]"
+          class="flex gap-2 items-center text-orange-500 border cursor-pointer border-orange-500 justify-center bg-orange-50 rounded-lg w-[130px] hover:bg-orange-500 hover:text-white"
+          (click)="onAddToCart(book)"
         >
           <lucide-icon [name]="ShoppingBasketIcon" size="20"></lucide-icon>
           <span>Add to cart</span>
