@@ -1,0 +1,72 @@
+<div class="flex h-[calc(100vh-60px)] items-center justify-center gap-4 p-3">
+  <div class="flex w-4/12">
+    <img
+      src="{{ bookDetail.image }}"
+      alt="{{ bookDetail.title }}"
+      class="h-[380px] w-[300px] rounded-lg"
+    />
+    <div class="flex h-[380px] w-full flex-col justify-between gap-4 p-3">
+      <div>
+        <p class="text-start text-2xl font-bold text-orange-500">
+          {{ bookDetail.title }}
+        </p>
+        <p class="text-start text-sm">
+          Author: <span class="text-orange-300">{{ bookDetail.author }}</span>
+        </p>
+        <p class="text-start text-sm">
+          Genre:
+          <span class="text-orange-300">{{
+            bookDetail.genres.join(", ")
+          }}</span>
+        </p>
+        <p class="text-start text-xl text-orange-500">
+          {{ bookDetail.price }} $
+        </p>
+
+        <app-star [rating]="bookDetail.rating" [txtSize]="20" [size]="20" />
+
+        <div class="my-6">
+          <p class="text-start">
+            <span class="text-orange-500">Description: </span>
+            {{ bookDetail.description }}
+          </p>
+        </div>
+
+        <app-button
+          [label]="'Add to cart'"
+          [type]="'button'"
+          [icon]="ShoppingBasketIcon"
+          (onClick)="onAddToCart(bookDetail)"
+        />
+      </div>
+
+      <div class="flex justify-center gap-14">
+        <div class="flex flex-col items-center text-xs text-gray-400">
+          <div>Page Count</div>
+          <lucide-icon [name]="BookOpenIcon" size="14"></lucide-icon>
+          <div>
+            <span class="text-orange-500"
+              >{{ bookDetail.pageCount }} pages</span
+            >
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center text-xs text-gray-400">
+          <div>Format</div>
+          <lucide-icon [name]="BookIcon" size="14"></lucide-icon>
+          <div>
+            <span class="text-orange-500">{{ bookDetail.format }}</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center text-xs text-gray-400">
+          <div>Barcode</div>
+          <lucide-icon [name]="BarcodeIcon" size="14"></lucide-icon>
+          <div>
+            <span class="text-orange-500">{{ bookDetail.isbn }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<div class="flex justify-end h-[60px] items-center">
+<div class="flex h-[60px] items-center justify-end">
   <mat-paginator
     class="bg-transparent"
     [length]="data.total"
@@ -11,18 +11,19 @@
 </div>
 
 <div
-  class="max-h-[calc(100%-160px)] grid xl:grid-cols-5 gap-4 p-4 overflow-y-scroll md:grid-cols-3 lg:grid-cols-4"
+  class="grid max-h-[calc(100%-160px)] gap-4 overflow-y-scroll p-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
 >
   <div
     *ngFor="let book of data.data"
     class="flex h-[194px] items-center justify-center"
   >
-    <div class="flex h-full w-full border border-gray-200 rounded-lg gap-4">
+    <div class="flex h-full w-full gap-4 rounded-lg border border-gray-200">
       <div class="flex justify-center">
         <img
           src="{{ book.image }}"
           alt="{{ book.title }}"
-          class="w-36 h-48 rounded-l-lg"
+          class="h-48 w-36 cursor-pointer rounded-l-lg"
+          (click)="onViewBook(book)"
         />
       </div>
 
@@ -36,40 +37,14 @@
             <p class="text-start">{{ book.price }} $</p>
           </div>
 
-          <div class="flex items-center">
-            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-              <i
-                *ngIf="book.rating >= star || book.rating < star - 0.5"
-                [ngClass]="{
-                  star: book.rating >= star,
-                  'star-o': book.rating < star - 0.5
-                }"
-                aria-hidden="true"
-              >
-                <lucide-icon [name]="StarIcon" size="12"></lucide-icon>
-              </i>
-
-              <i
-                *ngIf="book.rating >= star - 0.5 && book.rating < star"
-                [ngClass]="{
-                  star: book.rating >= star - 0.5 && book.rating < star
-                }"
-                aria-hidden="true"
-              >
-                <lucide-icon [name]="StarHalfIcon" size="12"></lucide-icon>
-              </i>
-            </ng-container>
-            <span class="text-xs">{{ book.rating }}</span>
-          </div>
+          <app-star [rating]="book.rating || 0"></app-star>
         </div>
 
-        <div
-          class="flex gap-2 items-center text-orange-500 border cursor-pointer border-orange-500 justify-center bg-orange-50 rounded-lg w-[130px] hover:bg-orange-500 hover:text-white"
-          (click)="onAddToCart(book)"
-        >
-          <lucide-icon [name]="ShoppingBasketIcon" size="20"></lucide-icon>
-          <span>Add to cart</span>
-        </div>
+        <app-button
+          [label]="'Add to cart'"
+          [icon]="ShoppingBasketIcon"
+          (onClick)="onAddToCart(book)"
+        />
       </div>
     </div>
   </div>

@@ -1,0 +1,11 @@
+<button
+  mat-raised-button
+  [type]="type"
+  (click)="handleClick()"
+  [disabled]="disabled"
+>
+  <div class="flex items-center gap-2">
+    <lucide-icon *ngIf="icon?.length ?? 0 > 0" [name]="icon" size="20" />
+    {{ label }}
+  </div>
+</button>

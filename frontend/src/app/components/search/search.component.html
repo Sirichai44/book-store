@@ -1,13 +1,17 @@
 <div class="relative w-[400px] h-[60px] flex items-center">
-  <input
-    type="text"
-    class="border border-gray-200 p-2 pr-12 w-full rounded-md focus:border-orange-500 focus:outline-none h-10"
-    placeholder="Search..."
-  />
-  <button
-    type="submit"
-    class="absolute right-0 top-2.5 bg-orange-500 text-white p-2 rounded-r-md hover:bg-orange-600 cursor-pointer h-10"
-  >
-    <lucide-icon [name]="searchIcon" size="20"></lucide-icon>
-  </button>
+  <form (ngSubmit)="onSearch()" class="w-full flex items-center">
+    <input
+      type="text"
+      [(ngModel)]="textSearch"
+      name="search"
+      class="border border-gray-200 p-2 pr-12 w-full rounded-md focus:border-orange-500 focus:outline-none h-10"
+      placeholder="Search..."
+    />
+    <button
+      type="submit"
+      class="absolute right-0 top-2.5 bg-orange-500 text-white p-2 rounded-r-md hover:bg-orange-600 cursor-pointer h-10"
+    >
+      <lucide-icon [name]="searchIcon" size="20"></lucide-icon>
+    </button>
+  </form>
 </div>

@@ -1,0 +1,25 @@
+<div class="flex items-center">
+  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+    <i
+      *ngIf="rating >= star || rating < star - 0.5"
+      [ngClass]="{
+        star: rating >= star,
+        'star-o': rating < star - 0.5,
+      }"
+      aria-hidden="true"
+    >
+      <lucide-icon [name]="StarIcon" [size]="size"></lucide-icon>
+    </i>
+
+    <i
+      *ngIf="rating >= star - 0.5 && rating < star"
+      [ngClass]="{
+        star: rating >= star - 0.5 && rating < star,
+      }"
+      aria-hidden="true"
+    >
+      <lucide-icon [name]="StarHalfIcon" [size]="size"></lucide-icon>
+    </i>
+  </ng-container>
+  <span [ngStyle]="{ 'font-size': txtSize + 'px' }">&nbsp;{{ rating }}</span>
+</div>

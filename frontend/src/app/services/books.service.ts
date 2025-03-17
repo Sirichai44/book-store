@@ -10,7 +10,11 @@ import { BehaviorSubject } from "rxjs"
 export class BooksService {
   private booksUrl = `${BASE_URL}/books`
 
-  private cartBooks = new BehaviorSubject<CartBooks[]>([])
+  private cartBooks$ = new BehaviorSubject<CartBooks[]>([])
+  private bookList$ = new BehaviorSubject<DtoBooks>({
+    data: [],
+    total: 0,
+  })
 
   constructor(private http: HttpClient) {}
 
@@ -19,24 +23,45 @@ export class BooksService {
     return this.http.get<DtoBooks>(this.booksUrl, { params: query })
   }
 
+  getBook(id: string) {
+    return this.http.get<Book>(`${this.booksUrl}/${id}`)
+  }
+
   addBook(book: Book) {
-    const hasBook = this.cartBooks.getValue().find((b) => b._id === book._id)
+    const hasBook = this.cartBooks$.getValue().find((b) => b._id === book._id)
     if (hasBook) {
-      const newCart = this.cartBooks.getValue().map((b) => ({
+      const newCart = this.cartBooks$.getValue().map((b) => ({
         ...b,
         quantity: b._id === book._id ? b.quantity + 1 : b.quantity,
       }))
 
-      this.cartBooks.next(newCart)
+      this.cartBooks$.next(newCart)
     } else {
-      this.cartBooks.next([
-        ...this.cartBooks.getValue(),
+      this.cartBooks$.next([
+        ...this.cartBooks$.getValue(),
         { ...book, quantity: 1 },
       ])
     }
   }
 
   getCart() {
-    return this.cartBooks.asObservable()
+    return this.cartBooks$.asObservable()
+  }
+
+  setCart(carts: CartBooks[]) {
+    this.cartBooks$.next(carts)
+  }
+
+  setBookList(books: DtoBooks) {
+    this.bookList$.next(books)
+  }
+
+  getBookList() {
+    return this.bookList$.asObservable()
+  }
+
+  removeCart(id: string) {
+    const newCart = this.cartBooks$.getValue().filter((b) => b._id !== id)
+    this.cartBooks$.next(newCart)
   }
 }

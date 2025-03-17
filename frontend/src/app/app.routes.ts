@@ -20,7 +20,21 @@ export const routes: Routes = [
             (m) => m.CheckoutComponent,
           ),
       },
+      {
+        path: "detail/:id",
+        loadComponent: () =>
+          import("./pages/detail-book/detail-book.component").then(
+            (m) => m.DetailBookComponent,
+          ),
+      },
+      {
+        path: "404",
+        loadComponent: () =>
+          import("./pages/notfound/notfound.component").then(
+            (m) => m.NotfoundComponent,
+          ),
+      },
     ],
   },
-  { path: "**", redirectTo: "" },
+  { path: "**", redirectTo: "/404" },
 ]

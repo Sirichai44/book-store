@@ -11,6 +11,7 @@ export interface Book {
   price: number
   format: string
   image: string
+  isbn: string
 }
 
 export interface DtoBooks {

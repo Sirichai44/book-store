@@ -3,10 +3,11 @@ import { BooksService } from "../../services/books.service"
 import { Subscription } from "rxjs"
 import { CartBooks } from "../../types/books"
 import { CommonModule } from "@angular/common"
+import { ButtonComponent } from "../../components/button/button.component"
 
 @Component({
   selector: "app-checkout",
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: "./checkout.component.html",
   styleUrl: "./checkout.component.css",
 })
@@ -28,5 +29,9 @@ export class CheckoutComponent {
 
   getTotalPrice() {
     return this.carts.reduce((acc, cart) => acc + cart.price * cart.quantity, 0)
+  }
+
+  onRemoveCart(id: string) {
+    this.booksService.removeCart(id)
   }
 }
