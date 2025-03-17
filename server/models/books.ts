@@ -16,4 +16,6 @@ const booksSchema = new mongoose.Schema({
   format: { type: String, required: true },
 })
 
+booksSchema.index({ title: "text", description: "text" })
+
 export default mongoose.model(DB_NAME_BOOKS, booksSchema)

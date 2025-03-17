@@ -17,34 +17,37 @@ export const getBooks = async (page: number, limit: number, search: string) => {
     })
   }
 
-  pipeline.push(
-    {
-      $project: {
-        title: 1,
-        description: 1,
-        author: 1,
-        pageCount: 1,
-        publisher: 1,
-        publishDate: 1,
-        genres: 1,
-        format: 1,
-        rating: 1,
-        price: 1,
-        image: 1,
-      },
+  pipeline.push({
+    $facet: {
+      data: [
+        {
+          $project: {
+            title: 1,
+            description: 1,
+            author: 1,
+            pageCount: 1,
+            publisher: 1,
+            publishDate: 1,
+            genres: 1,
+            format: 1,
+            rating: 1,
+            price: 1,
+            image: 1,
+          },
+        },
+        { $skip: skip },
+        { $limit: limit },
+      ],
+      total: [{ $count: "count" }],
     },
-    { $skip: skip },
-    { $limit: limit },
-  )
+  })
 
   const books = await BooksSchema.aggregate(pipeline)
-  const total = await BooksSchema.countDocuments(
-    search ? { $text: { $search: search } } : {},
-  )
-  const obj = {
-    data: books,
-    total,
-  }
+
+  const data = books[0]?.data || []
+  const total = books[0]?.total?.[0]?.count || 0
+
+  const obj = { data, total }
 
   return obj
 }
