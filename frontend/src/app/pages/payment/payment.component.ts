@@ -8,6 +8,7 @@ import {
 } from "@angular/forms"
 import { ButtonComponent } from "../../components/button/button.component"
 import { BooksService } from "../../services/books.service"
+import { PaymentService } from "../../services/payment.service"
 
 @Component({
   selector: "app-payment",
@@ -20,7 +21,7 @@ export class PaymentComponent {
 
   constructor(
     private fb: FormBuilder,
-    private booksService: BooksService,
+    private paymentService: PaymentService,
   ) {
     this.paymentForm = this.fb.group({
       cardNumber: [
@@ -100,7 +101,11 @@ export class PaymentComponent {
   onSubmit() {
     if (this.paymentForm.valid) {
       const { cardNumber, expiryDate, cvv } = this.paymentForm.value
-      this.booksService.payment({ number: cardNumber, expiry: expiryDate, cvv })
+      this.paymentService.payment({
+        number: cardNumber,
+        expiry: expiryDate,
+        cvv,
+      })
     }
   }
 }

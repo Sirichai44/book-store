@@ -1,24 +1,14 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { BASE_URL } from "./apis"
-import {
-  Book,
-  CartBooks,
-  Checkout,
-  DtoBooks,
-  Payment,
-  PaymentPayload,
-} from "../types/books"
+import { Book, CartBooks, Checkout, DtoBooks } from "../types/books"
 import { BehaviorSubject } from "rxjs"
-import { ToastrService } from "ngx-toastr"
-import { Router } from "@angular/router"
 
 @Injectable({
   providedIn: "root",
 })
 export class BooksService {
   private booksUrl = `${BASE_URL}/books`
-  private paymentUrl = `${BASE_URL}/payment`
 
   private cartBooks$ = new BehaviorSubject<CartBooks[]>([])
   private bookList$ = new BehaviorSubject<DtoBooks>({
@@ -31,11 +21,7 @@ export class BooksService {
     items: [],
   })
 
-  constructor(
-    private http: HttpClient,
-    private toastr: ToastrService,
-    private router: Router,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   getBooks(page: number, limit: number, search: string) {
     const query = { page: page, limit: limit, search: search }
@@ -90,30 +76,5 @@ export class BooksService {
 
   getObjCheckout() {
     return this.objCheckout$.asObservable()
-  }
-
-  payment(obj: Payment) {
-    const checkout = this.objCheckout$.getValue()
-    const payload: PaymentPayload = {
-      amount: checkout.amount,
-      currency: checkout.currency,
-      items: checkout.items,
-      card: obj,
-    }
-
-    return this.http.post<PaymentPayload>(this.paymentUrl, payload).subscribe(
-      (res) => {
-        this.toastr.success("Payment Success")
-        this.cartBooks$.next([])
-        this.objCheckout$.next({ amount: 0, currency: "", items: [] })
-
-        setTimeout(() => {
-          this.router.navigate(["/"])
-        }, 1000)
-      },
-      (err) => {
-        this.toastr.error("Payment Failed")
-      },
-    )
   }
 }

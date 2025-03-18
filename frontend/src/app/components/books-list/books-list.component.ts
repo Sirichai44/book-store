@@ -46,7 +46,6 @@ export class BooksListComponent {
         this.page = params["page"] || 1
         this.limit = params["limit"] || 10
         this.getBooks(this.page, this.limit, this.search)
-        this.updateQueryParams()
       },
     )
 
