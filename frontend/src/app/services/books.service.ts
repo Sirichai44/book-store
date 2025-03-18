@@ -10,12 +10,15 @@ import {
   PaymentPayload,
 } from "../types/books"
 import { BehaviorSubject } from "rxjs"
+import { ToastrService } from "ngx-toastr"
+import { Router } from "@angular/router"
 
 @Injectable({
   providedIn: "root",
 })
 export class BooksService {
   private booksUrl = `${BASE_URL}/books`
+  private paymentUrl = `${BASE_URL}/payment`
 
   private cartBooks$ = new BehaviorSubject<CartBooks[]>([])
   private bookList$ = new BehaviorSubject<DtoBooks>({
@@ -28,7 +31,11 @@ export class BooksService {
     items: [],
   })
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private router: Router,
+  ) {}
 
   getBooks(page: number, limit: number, search: string) {
     const query = { page: page, limit: limit, search: search }
@@ -94,6 +101,19 @@ export class BooksService {
       card: obj,
     }
 
-    return this.http.post(`${BASE_URL}/payment`, payload)
+    return this.http.post<PaymentPayload>(this.paymentUrl, payload).subscribe(
+      (res) => {
+        this.toastr.success("Payment Success")
+        this.cartBooks$.next([])
+        this.objCheckout$.next({ amount: 0, currency: "", items: [] })
+
+        setTimeout(() => {
+          this.router.navigate(["/"])
+        }, 1000)
+      },
+      (err) => {
+        this.toastr.error("Payment Failed")
+      },
+    )
   }
 }

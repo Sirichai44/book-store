@@ -7,6 +7,8 @@ import {
   withEventReplay,
 } from "@angular/platform-browser"
 import { provideHttpClient, withFetch } from "@angular/common/http"
+import { provideToastr } from "ngx-toastr"
+import { provideAnimations } from "@angular/platform-browser/animations"
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -14,5 +16,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
+    provideToastr({
+      positionClass: "toast-top-right",
+      timeOut: 2000,
+    }),
+    provideAnimations(),
   ],
 }
