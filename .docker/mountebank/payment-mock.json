@@ -13,7 +13,7 @@
         {
           "matches": {
             "body": {
-              "amount": 100,
+              "amount": "^[0-9]+$",
               "currency": "USD",
               "card": {
                 "number": "^[0-9]{16}$",
