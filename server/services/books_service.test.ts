@@ -17,25 +17,21 @@ describe("Book Service", () => {
         return new BooksSchema({
           title: `Book ${i + 1}`,
           author: `Author ${i + 1}`,
-          pageCount: 300 + i,
-          description: `Description ${i + 1}`,
-          publishDate: new Date(`2025-03-15T00:00:00Z`),
-          genres: [`Genre ${i + 1}`, `Genre ${i + 2}`],
-          format: "Hardcover",
-          isbn: `978-1-234567-89-${i}`,
-          language: "English",
-          price: 29.99,
-          publisher: "Future Press",
           rating: 4.8,
+          price: 29.99,
+          image: `image ${i + 1}`,
+          stock: 10,
         })
       })
-
-      mockAggregate.mockResolvedValue(mockBooks)
+      mockAggregate.mockResolvedValue([
+        { data: mockBooks, total: [{ count: mockBooks.length }] },
+      ])
 
       const result = await booksService.getBooks(1, 10, "")
 
-      expect(result).toEqual(mockBooks)
       expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
+      expect(result.data).toEqual(mockBooks)
+      expect(result.total).toEqual(mockBooks.length)
     })
 
     it("should return books with search", async () => {
@@ -44,7 +40,7 @@ describe("Book Service", () => {
           title: `Book ${i + 1}`,
           author: `Author ${i + 1}`,
           pageCount: 300 + i,
-          description: `Description ${i + 1}`,
+          description: `Description Test ${i + 1}`,
           publishDate: new Date(`2025-03-15T00:00:00Z`),
           genres: [`Genre ${i + 1}`, `Genre ${i + 2}`],
           format: "Hardcover",
@@ -53,15 +49,19 @@ describe("Book Service", () => {
           price: 29.99,
           publisher: "Future Press",
           rating: 4.8,
+          image: `image ${i + 1}`,
+          stock: 10,
         })
       })
-
-      mockAggregate.mockResolvedValue(mockBooks)
+      mockAggregate.mockResolvedValue([
+        { data: mockBooks, total: [{ count: mockBooks.length }] },
+      ])
 
       const result = await booksService.getBooks(1, 10, "Test")
 
-      expect(result).toEqual(mockBooks)
       expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
+      expect(result.data).toEqual(mockBooks)
+      expect(result.total).toEqual(mockBooks.length)
     })
   })
 

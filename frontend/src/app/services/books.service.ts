@@ -1,7 +1,14 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { BASE_URL } from "./apis"
-import { Book, CartBooks, DtoBooks } from "../types/books"
+import {
+  Book,
+  CartBooks,
+  Checkout,
+  DtoBooks,
+  Payment,
+  PaymentPayload,
+} from "../types/books"
 import { BehaviorSubject } from "rxjs"
 
 @Injectable({
@@ -14,6 +21,11 @@ export class BooksService {
   private bookList$ = new BehaviorSubject<DtoBooks>({
     data: [],
     total: 0,
+  })
+  private objCheckout$ = new BehaviorSubject<Checkout>({
+    amount: 0,
+    currency: "",
+    items: [],
   })
 
   constructor(private http: HttpClient) {}
@@ -63,5 +75,25 @@ export class BooksService {
   removeCart(id: string) {
     const newCart = this.cartBooks$.getValue().filter((b) => b._id !== id)
     this.cartBooks$.next(newCart)
+  }
+
+  setObjCheckout(obj: Checkout) {
+    this.objCheckout$.next(obj)
+  }
+
+  getObjCheckout() {
+    return this.objCheckout$.asObservable()
+  }
+
+  payment(obj: Payment) {
+    const checkout = this.objCheckout$.getValue()
+    const payload: PaymentPayload = {
+      amount: checkout.amount,
+      currency: checkout.currency,
+      items: checkout.items,
+      card: obj,
+    }
+
+    return this.http.post(`${BASE_URL}/payment`, payload)
   }
 }

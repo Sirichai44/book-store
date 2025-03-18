@@ -14,6 +14,8 @@ const booksSchema = new mongoose.Schema({
   rating: { type: Number, required: true, min: 0, max: 5 },
   price: { type: Number, required: true },
   format: { type: String, required: true },
+  image: { type: String, required: true },
+  stock: { type: Number, required: true },
 })
 
 booksSchema.index({ title: "text", description: "text" })

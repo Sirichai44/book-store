@@ -15,16 +15,10 @@ describe("Book Handler", () => {
         return new BooksSchema({
           title: `Book ${i + 1}`,
           author: `Author ${i + 1}`,
-          pageCount: 300 + i,
-          description: `Description ${i + 1}`,
-          publishDate: new Date(`2025-03-15T00:00:00Z`),
-          genres: [`Genre ${i + 1}`, `Genre ${i + 2}`],
-          format: "Hardcover",
-          isbn: `978-1-234567-89-${i}`,
-          language: "English",
-          price: 29.99,
-          publisher: "Future Press",
           rating: 4.8,
+          price: 29.99,
+          image: `image ${i + 1}`,
+          stock: 10,
         })
       })
 
@@ -44,13 +38,18 @@ describe("Book Handler", () => {
         json: jest.fn().mockReturnThis(),
       } as unknown as Response
 
-      mockAggregate.mockResolvedValue(mockBooks)
+      mockAggregate.mockResolvedValue([
+        { data: mockBooks, total: [{ count: mockBooks.length }] },
+      ])
 
       await booksHandler.booksList(mockReq, mockResponse)
 
       expect(BooksSchema.aggregate).toHaveBeenCalledTimes(1)
       expect(mockResponse.status).toHaveBeenCalledWith(200)
-      expect(mockResponse.json).toHaveBeenCalledWith(mockBooks)
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        data: mockBooks,
+        total: mockBooks.length,
+      })
     })
 
     it("should return 400 if page or limit is missing", async () => {

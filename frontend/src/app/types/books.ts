@@ -22,3 +22,28 @@ export interface DtoBooks {
 export interface CartBooks extends Book {
   quantity: number
 }
+
+export interface Checkout {
+  amount: number
+  currency: string
+  items: Item[]
+}
+
+interface Item {
+  name: string
+  quantity: number
+  price: number
+}
+
+export interface Payment {
+  number: string
+  expiry: string
+  cvv: string
+}
+
+export interface PaymentPayload {
+  amount: number
+  currency: string
+  items: Item[]
+  card: Payment
+}

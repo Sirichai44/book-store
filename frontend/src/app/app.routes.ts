@@ -28,6 +28,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: "payment",
+        loadComponent: () =>
+          import("./pages/payment/payment.component").then(
+            (m) => m.PaymentComponent,
+          ),
+      },
+      {
         path: "404",
         loadComponent: () =>
           import("./pages/notfound/notfound.component").then(

@@ -47,3 +47,15 @@ body {
 .star-o {
   color: gray;
 }
+
+.app-input {
+  border: 1px solid theme("colors.gray.200");
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  width: 100%;
+
+  &:focus {
+    outline-style: none;
+    border-color: theme("colors.orange.500") !important;
+  }
+}

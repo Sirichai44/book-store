@@ -27,6 +27,7 @@ export const getBooks = async (page: number, limit: number, search: string) => {
             rating: 1,
             price: 1,
             image: 1,
+            stock: 1,
           },
         },
         { $skip: skip },
