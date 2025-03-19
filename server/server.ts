@@ -9,7 +9,7 @@ morgan.token("host", function (req, res) {
   return req.headers.host
 })
 app.use(
-  morgan(":method :host :status :res[content-length] - :response-time ms"),
+  morgan(":method :host :url :status :res[content-length] - :response-time ms"),
 )
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

@@ -1,14 +1,17 @@
-import { Router, type Request } from "express"
+import { Router } from "express"
 import * as bookHandler from "../handlers/book_handler.ts"
-import type { BooksListRequestBody } from "../types/book.ts"
+import {
+  validateGetBookById,
+  validateGetBooks,
+} from "./middleware/books_middleware.ts"
 
 const booksRouter = Router()
 
-booksRouter.get("/", (req: Request<{}, {}, {}, BooksListRequestBody>, res) => {
+booksRouter.get("/", validateGetBooks, (req, res) => {
   bookHandler.booksList(req, res)
 })
 
-booksRouter.get("/:id", (req, res) => {
+booksRouter.get("/:id", validateGetBookById, (req, res) => {
   bookHandler.bookById(req, res)
 })
 

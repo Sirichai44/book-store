@@ -52,24 +52,6 @@ describe("Book Handler", () => {
       })
     })
 
-    it("should return 400 if page or limit is missing", async () => {
-      const mockReq = {
-        query: {},
-      } as Request<{}, {}, {}, BooksListRequestBody>
-
-      const mockResponse = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn().mockReturnThis(),
-      } as unknown as Response
-
-      await booksHandler.booksList(mockReq, mockResponse)
-
-      expect(mockResponse.status).toHaveBeenCalledWith(400)
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        message: "Page and limit are required",
-      })
-    })
-
     it("should return 500 if an error occurs", async () => {
       const mockReq = {
         query: {
@@ -135,29 +117,6 @@ describe("Book Handler", () => {
       expect(BooksSchema.findById).toHaveBeenCalledWith(id)
       expect(mockResponse.status).toHaveBeenCalledWith(200)
       expect(mockResponse.json).toHaveBeenCalledWith(mockBook)
-    })
-
-    it("should return 400 if id is invalid", async () => {
-      const mockReq = {
-        params: {
-          id: "invalid-id",
-        },
-        headers: {
-          host: "localhost",
-        },
-      } as Request<{ id: string }>
-
-      const mockResponse = {
-        status: jest.fn().mockReturnThis(),
-        json: jest.fn().mockReturnThis(),
-      } as unknown as Response
-
-      await booksHandler.bookById(mockReq, mockResponse)
-
-      expect(mockResponse.status).toHaveBeenCalledWith(400)
-      expect(mockResponse.json).toHaveBeenCalledWith({
-        message: "Invalid id",
-      })
     })
 
     it("should return 404 if book is not found", async () => {

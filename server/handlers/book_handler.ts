@@ -2,7 +2,6 @@ import type { Request, Response } from "express"
 import * as bookService from "../services/books_service.ts"
 import logger from "../config/logger.ts"
 import type { BooksListRequestBody } from "../types/book.ts"
-import { validObjectID } from "../config/config.ts"
 
 export const booksList = async (
   req: Request<{}, {}, {}, BooksListRequestBody>,
@@ -12,10 +11,6 @@ export const booksList = async (
   const p = parseInt(page)
   const l = parseInt(limit)
   const searchStr = search ? search.toString() : ""
-
-  if (!p || !l) {
-    return res.status(400).json({ message: "Page and limit are required" })
-  }
 
   try {
     const books = await bookService.getBooks(p, l, searchStr)
@@ -31,11 +26,6 @@ export const booksList = async (
 
 export const bookById = async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params
-
-  if (!validObjectID(id)) {
-    logger.error(`Books handler: ${req.headers.host} Invalid id`)
-    return res.status(400).json({ message: "Invalid id" })
-  }
 
   try {
     const book = await bookService.getBookById(id)
