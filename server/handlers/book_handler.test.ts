@@ -1,11 +1,9 @@
-import { describe, expect, it, jest } from "bun:test"
 import * as booksHandler from "../handlers/book_handler.ts"
 import BooksSchema from "../models/books.ts"
 import type { BooksListRequestBody } from "../types/book.ts"
 import type { Request, Response } from "express"
 
 const mockAggregate = (BooksSchema.aggregate = jest.fn())
-
 const mockFindByID = (BooksSchema.findById = jest.fn())
 
 describe("Book Handler", () => {

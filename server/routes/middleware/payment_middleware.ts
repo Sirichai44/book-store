@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express"
 import { z } from "zod"
-import type { Payment } from "../../types/payment"
+import type { ProcessPayment } from "../../types/payment"
 import logger from "../../config/logger.ts"
 
 const paymentSchema = z.object({
@@ -24,7 +24,7 @@ const paymentSchema = z.object({
 })
 
 export const validateProcessPayment = (
-  req: Request<{}, {}, Payment>,
+  req: Request<{}, {}, ProcessPayment>,
   res: Response,
   next: NextFunction,
 ) => {

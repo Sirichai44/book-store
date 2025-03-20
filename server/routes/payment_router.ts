@@ -1,10 +1,11 @@
-import { Router, type Request } from "express"
+import { Router } from "express"
 import * as paymentHandler from "../handlers/payment_handler.ts"
+import { validateProcessPayment } from "./middleware/payment_middleware.ts"
 
 const paymentRouter = Router()
 
-paymentRouter.post("/", (req: Request<{}, {}, {}>, res) => {
-  paymentHandler.payment(req, res)
+paymentRouter.post("/", validateProcessPayment, (req, res) => {
+  paymentHandler.processPayment(req, res)
 })
 
 export default paymentRouter

@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from "bun:test"
-import type { Payment } from "../../types/payment"
+import type { ProcessPayment } from "../../types/payment"
 import type { NextFunction, Request, Response } from "express"
 import { validateProcessPayment } from "./payment_middleware"
 
@@ -27,7 +26,7 @@ describe("Payment Middleware", () => {
       }
 
       validateProcessPayment(
-        req as unknown as Request<{}, {}, Payment>,
+        req as unknown as Request<{}, {}, ProcessPayment>,
         res as Response,
         next,
       )
@@ -44,7 +43,7 @@ describe("Payment Middleware", () => {
       }
 
       validateProcessPayment(
-        req as unknown as Request<{}, {}, Payment>,
+        req as unknown as Request<{}, {}, ProcessPayment>,
         res as Response,
         next,
       )
@@ -64,7 +63,7 @@ describe("Payment Middleware", () => {
       }
 
       validateProcessPayment(
-        req as unknown as Request<{}, {}, Payment>,
+        req as unknown as Request<{}, {}, ProcessPayment>,
         res as Response,
         next,
       )
