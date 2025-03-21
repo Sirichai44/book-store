@@ -29,10 +29,13 @@ export class PaymentService {
       this.checkout = res
     })
     const payload: PaymentPayload = {
-      amount: this.checkout.amount,
+      amount: parseFloat(this.checkout.amount.toFixed(2)),
       currency: this.checkout.currency,
       items: this.checkout.items,
-      card: obj,
+      card: {
+        ...obj,
+        number: obj.number.replace(/\s/g, ""),
+      },
     }
 
     return this.http.post<PaymentPayload>(this.paymentUrl, payload).subscribe(
@@ -45,9 +48,9 @@ export class PaymentService {
           items: [],
         })
 
-        // setTimeout(() => {
-        //   this.router.navigate(["/"])
-        // }, 1000)
+        setTimeout(() => {
+          this.router.navigate(["/"])
+        }, 1000)
       },
       (err) => {
         this.toastr.error("Payment Failed")

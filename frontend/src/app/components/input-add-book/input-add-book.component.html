@@ -1,0 +1,21 @@
+<div class="flex w-20 rounded-lg border border-gray-200">
+  <button
+    class="h-6 w-6 cursor-pointer border-r border-gray-200 hover:bg-gray-100"
+    (click)="decrementQuantity()"
+  >
+    -
+  </button>
+
+  <input
+    type="number"
+    [value]="book.quantity || 1"
+    class="w-8 text-center text-xs focus:border focus:border-orange-500 focus:outline-none"
+    (input)="onInputChange($event)"
+  />
+  <button
+    class="h-6 w-6 cursor-pointer border-l border-gray-200 hover:bg-gray-100"
+    (click)="incrementQuantity()"
+  >
+    +
+  </button>
+</div>

@@ -12,15 +12,13 @@ export interface Book {
   format: string
   image: string
   isbn: string
+  stock: number
+  quantity: number
 }
 
 export interface DtoBooks {
   data: Book[]
   total: number
-}
-
-export interface CartBooks extends Book {
-  quantity: number
 }
 
 export interface Checkout {
@@ -30,6 +28,7 @@ export interface Checkout {
 }
 
 interface Item {
+  _id: string
   name: string
   quantity: number
   price: number

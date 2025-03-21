@@ -5,7 +5,7 @@ import { LucideAngularModule, ShoppingCart } from "lucide-angular"
 import { BooksListComponent } from "../../components/books-list/books-list.component"
 import { BooksService } from "../../services/books.service"
 import { Subscription } from "rxjs"
-import { CartBooks } from "../../types/books"
+import { Book } from "../../types/books"
 import { CommonModule } from "@angular/common"
 
 @Component({
@@ -23,7 +23,7 @@ import { CommonModule } from "@angular/common"
 export class HomeComponent {
   ShoppingCartIcon = ShoppingCart
   showDetailCart = false
-  carts: CartBooks[] = []
+  carts: Book[] = []
   private cartSubscription: Subscription = new Subscription()
 
   constructor(private booksService: BooksService) {}

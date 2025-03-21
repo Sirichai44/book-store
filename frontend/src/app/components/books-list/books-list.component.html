@@ -14,22 +14,22 @@
   class="grid max-h-[calc(100%-160px)] gap-4 overflow-y-scroll p-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
 >
   <div
-    *ngFor="let book of data.data"
-    class="flex h-[194px] items-center justify-center"
+    *ngFor="let book of data.data; trackBy: trackByBookId"
+    class="flex h-[226px] items-center justify-center"
   >
     <div class="flex h-full w-full gap-4 rounded-lg border border-gray-200">
       <div class="flex justify-center">
         <img
           src="{{ book.image }}"
           alt="{{ book.title }}"
-          class="h-48 w-36 cursor-pointer rounded-l-lg"
+          class="h-56 w-40 cursor-pointer rounded-l-lg"
           (click)="onViewBook(book)"
         />
       </div>
 
       <div class="flex flex-col justify-between p-3">
         <div>
-          <div>
+          <div class="truncate">
             <p class="text-start">{{ book.title }}</p>
             <p class="text-start text-sm text-gray-400">
               Author: {{ book.author }}
@@ -38,13 +38,28 @@
           </div>
 
           <app-star [rating]="book.rating || 0"></app-star>
+
+          <div class="mt-1">
+            <p class="text-start text-sm">
+              Stock:
+              <span class="text-lg font-bold text-orange-500">{{
+                book.stock
+              }}</span>
+            </p>
+          </div>
         </div>
 
-        <app-button
-          [label]="'Add to cart'"
-          [icon]="ShoppingBasketIcon"
-          (onClick)="onAddToCart(book)"
-        />
+        <div class="flex flex-col gap-2">
+          <app-input-add-book
+            [book]="book"
+            (onBookQuantityChange)="onBookQuantityChange($event)"
+          />
+          <app-button
+            [label]="'Add to cart'"
+            [icon]="ShoppingBasketIcon"
+            (onClick)="onAddToCart(book)"
+          />
+        </div>
       </div>
     </div>
   </div>

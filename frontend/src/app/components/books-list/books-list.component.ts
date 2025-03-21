@@ -8,6 +8,7 @@ import { LucideAngularModule, ShoppingBasket } from "lucide-angular"
 import { Subscription } from "rxjs"
 import { StarComponent } from "../star/star.component"
 import { ButtonComponent } from "../button/button.component"
+import { InputAddBookComponent } from "../input-add-book/input-add-book.component"
 
 @Component({
   selector: "app-books-list",
@@ -17,6 +18,7 @@ import { ButtonComponent } from "../button/button.component"
     MatPaginatorModule,
     StarComponent,
     ButtonComponent,
+    InputAddBookComponent,
   ],
   templateUrl: "./books-list.component.html",
   styleUrl: "./books-list.component.css",
@@ -63,7 +65,11 @@ export class BooksListComponent {
 
   getBooks(page: number, limit: number, search: string) {
     this.booksService.getBooks(page, limit, search).subscribe((data) => {
-      this.booksService.setBookList(data)
+      const newData = {
+        ...data,
+        data: data.data.map((d) => ({ ...d, quantity: 1 })),
+      }
+      this.booksService.setBookList(newData)
     })
   }
 
@@ -91,5 +97,18 @@ export class BooksListComponent {
 
   onViewBook(book: Book) {
     this.router.navigate(["/detail", book._id])
+  }
+
+  onBookQuantityChange(event: { book: Book }) {
+    const newData = this.data.data.map((b) => {
+      const newQ = b._id === event.book._id ? event.book.quantity : b.quantity
+      return { ...b, quantity: newQ }
+    })
+
+    this.booksService.setBookList({ ...this.data, data: newData })
+  }
+
+  trackByBookId(index: number, book: Book): string {
+    return book._id
   }
 }

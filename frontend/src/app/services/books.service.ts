@@ -1,8 +1,9 @@
 import { HttpClient } from "@angular/common/http"
 import { Injectable } from "@angular/core"
 import { BASE_URL } from "./apis"
-import { Book, CartBooks, Checkout, DtoBooks } from "../types/books"
+import { Book, Checkout, DtoBooks } from "../types/books"
 import { BehaviorSubject } from "rxjs"
+import { ToastrService } from "ngx-toastr"
 
 @Injectable({
   providedIn: "root",
@@ -10,7 +11,7 @@ import { BehaviorSubject } from "rxjs"
 export class BooksService {
   private booksUrl = `${BASE_URL}/books`
 
-  private cartBooks$ = new BehaviorSubject<CartBooks[]>([])
+  private cartBooks$ = new BehaviorSubject<Book[]>([])
   private bookList$ = new BehaviorSubject<DtoBooks>({
     data: [],
     total: 0,
@@ -21,7 +22,10 @@ export class BooksService {
     items: [],
   })
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private toastr: ToastrService,
+  ) {}
 
   getBooks(page: number, limit: number, search: string) {
     const query = { page: page, limit: limit, search: search }
@@ -34,18 +38,28 @@ export class BooksService {
 
   addBook(book: Book) {
     const hasBook = this.cartBooks$.getValue().find((b) => b._id === book._id)
+
     if (hasBook) {
+      const overStock = hasBook.quantity + book.quantity > hasBook.stock
+      if (overStock) {
+        this.toastr.warning("Stock is not enough")
+        return
+      }
+
       const newCart = this.cartBooks$.getValue().map((b) => ({
         ...b,
-        quantity: b._id === book._id ? b.quantity + 1 : b.quantity,
+        quantity: b._id === book._id ? b.quantity + book.quantity : b.quantity,
       }))
 
       this.cartBooks$.next(newCart)
     } else {
-      this.cartBooks$.next([
-        ...this.cartBooks$.getValue(),
-        { ...book, quantity: 1 },
-      ])
+      const overStock = book.quantity > book.stock
+      if (overStock) {
+        this.toastr.warning("Stock is not enough")
+        return
+      }
+
+      this.cartBooks$.next([...this.cartBooks$.getValue(), book])
     }
   }
 
@@ -53,7 +67,7 @@ export class BooksService {
     return this.cartBooks$.asObservable()
   }
 
-  setCart(carts: CartBooks[]) {
+  setCart(carts: Book[]) {
     this.cartBooks$.next(carts)
   }
 

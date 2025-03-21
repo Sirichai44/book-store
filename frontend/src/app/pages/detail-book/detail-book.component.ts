@@ -10,13 +10,21 @@ import {
   Barcode,
   Book,
   ShoppingBasket,
+  Container,
 } from "lucide-angular"
 import { StarComponent } from "../../components/star/star.component"
 import { ButtonComponent } from "../../components/button/button.component"
+import { InputAddBookComponent } from "../../components/input-add-book/input-add-book.component"
 
 @Component({
   selector: "app-detail-book",
-  imports: [CommonModule, LucideAngularModule, StarComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    LucideAngularModule,
+    StarComponent,
+    ButtonComponent,
+    InputAddBookComponent,
+  ],
   templateUrl: "./detail-book.component.html",
   styleUrl: "./detail-book.component.css",
 })
@@ -25,24 +33,11 @@ export class DetailBookComponent {
   BarcodeIcon = Barcode
   BookIcon = Book
   ShoppingBasketIcon = ShoppingBasket
+  ContainerIcon = Container
 
   private detailBookSubscription: Subscription = new Subscription()
 
-  bookDetail: BookType = {
-    _id: "",
-    title: "",
-    author: "",
-    description: "",
-    format: "",
-    genres: [],
-    image: "",
-    pageCount: 0,
-    price: 0,
-    publishDate: "",
-    publisher: "",
-    rating: 0,
-    isbn: "",
-  }
+  bookDetail!: BookType
 
   id = ""
 
@@ -69,7 +64,7 @@ export class DetailBookComponent {
         )
         .subscribe((book) => {
           if (book) {
-            this.bookDetail = book
+            this.bookDetail = { ...book, quantity: 1 }
           }
         })
     })
@@ -81,5 +76,9 @@ export class DetailBookComponent {
 
   onAddToCart(book: BookType) {
     this.booksService.addBook(book)
+  }
+
+  onBookQuantityChange(event: { book: BookType }) {
+    this.bookDetail = event.book
   }
 }

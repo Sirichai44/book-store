@@ -22,9 +22,15 @@
             <img
               src="{{ cartItem.image }}"
               alt="{{ cartItem.title }}"
-              class="w-18 h-24 rounded-md object-cover"
+              class="h-24 w-18 rounded-md object-cover"
             />
-            <div>{{ cartItem.title }}</div>
+            <div>
+              <p>{{ cartItem.title }}</p>
+              <p class="text-xs text-gray-400">
+                {{ cartItem.stock }}
+                {{ cartItem.stock > 1 ? "books" : "book" }} in stock
+              </p>
+            </div>
           </div>
           <div
             class="col-span-2 flex items-center justify-center p-3 text-center"
@@ -34,12 +40,15 @@
           <div
             class="col-span-2 flex items-center justify-center p-3 text-center"
           >
-            {{ cartItem.quantity }}
+            <app-input-add-book
+              [book]="cartItem"
+              (onBookQuantityChange)="onBookQuantityChange($event)"
+            />
           </div>
           <div
             class="col-span-2 flex items-center justify-center p-3 text-center text-orange-500"
           >
-            {{ cartItem.price * cartItem.quantity }} $
+            {{ cartItem.price * cartItem.quantity | number: "1.2-2" }} $
           </div>
           <div
             class="col-span-2 flex cursor-pointer items-center justify-center p-3 text-center"
@@ -57,7 +66,7 @@
       <div>
         Total Price:
         <span class="text-2xl font-bold text-orange-500"
-          >{{ getTotalPrice() }} $</span
+          >{{ getTotalPrice() | number: "1.2-2" }} $</span
         >
       </div>
 
